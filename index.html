@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dul Shop Tecnología</title>
+    <link rel="stylesheet" href="assets/css/base.css">
+</head>
+<body>
+
+    <!-- Autenticación -->
+    <div id="auth-view" class="auth-container">
+        <!-- Login -->
+        <div id="login-card" class="auth-card">
+            <h1>Dul Shop</h1>
+            <p>Ingresa para gestionar tu tienda</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="login-user" class="form-control" required placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-pass" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                <button type="button" class="btn btn-link" onclick="toggleAuth('register')">¿No tienes cuenta? Regístrate</button>
+            </form>
+        </div>
+
+        <!-- Registro -->
+        <div id="register-card" class="auth-card hidden">
+            <h1>Crear Cuenta</h1>
+            <p>Únete a la familia Dul Shop</p>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Usuario Nuevo</label>
+                    <input type="text" id="reg-user" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="reg-pass" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <button type="button" class="btn btn-link" onclick="toggleAuth('login')">Ya tengo cuenta. Volver al Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard (Principal) -->
+    <div id="main-view" class="hidden">
+        <nav class="navbar">
+            <div class="logo">Dul Shop</div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" onclick="showSection('inventory')">Inventario</a>
+                <a href="#" class="nav-link" onclick="showSection('billing')">Facturación</a>
+                <a href="#" onclick="logout()">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="container">
+            <!-- Sección de Inventario -->
+            <section id="inventory-section">
+                <div class="section-header">
+                    <h2>Control de Inventario</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openProductModal()">+ Nuevo Producto</button>
+                </div>
+                
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table-body">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Sección de Facturación -->
+            <section id="billing-section" class="hidden">
+                <div class="section-header">
+                    <h2>Facturación y Guías</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openBillingModal()">+ Nueva Factura</button>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billing-table-body">
+                        <!-- Se llena dinámicamente -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para Productos -->
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal-title">Nuevo Producto</h3>
+            <form id="product-form">
+                <div class="form-group">
+                    <label>Código</label>
+                    <input type="text" id="p-code" class="form-control" required placeholder="Ej: P001">
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="p-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="p-category" class="form-control" required>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Smartphone">Smartphone</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Accesorio">Accesorio</option>
+                        <option value="Componente">Componente</option>
+                    </select>
+                </div>
+                <div class="flex-row">
+                    <div class="form-group flex-1">
+                        <label>Stock</label>
+                        <input type="number" id="p-stock" class="form-control" required min="0">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>Precio</label>
+                        <input type="number" id="p-price" class="form-control" required min="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Facturación -->
+    <div id="billing-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Nueva Factura / Guía</h3>
+            <form id="billing-form">
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <input type="text" id="b-customer" class="form-control" required placeholder="Nombre completo">
+                </div>
+                <div class="form-group">
+                    <label>Dirección (Para la Guía)</label>
+                    <input type="text" id="b-address" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Producto</label>
+                    <select id="b-product" class="form-control" required onchange="updateBillingTotal()">
+                        <!-- Se llena con el inventario -->
+                    </select>
+                </div>
+                <div class="flex-row">
+                    <div class="form-group flex-1">
+                        <label>Cantidad</label>
+                        <input type="number" id="b-qty" class="form-control" required min="1" value="1" oninput="updateBillingTotal()">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>Total</label>
+                        <input type="text" id="b-total" class="form-control" readonly value="$0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Generar Factura y Guía</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeBillingModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Guía de Envío -->
+    <div id="guide-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Guía de Envío Detallada</h3>
+            <div id="guide-content" class="guide-card mt-1">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeGuideModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/billing.js"></script>
+</body>
+</html>
