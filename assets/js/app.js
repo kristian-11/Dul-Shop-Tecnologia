@@ -6,6 +6,10 @@ function showSection(sectionId) {
     const sections = ['inventory-section', 'billing-section'];
     const navLinks = document.querySelectorAll('.nav-link');
 
+    // Cerrar menú móvil al navegar
+    const navContainer = document.getElementById('nav-links');
+    if (navContainer) navContainer.classList.remove('active');
+
     sections.forEach(id => {
         const el = document.getElementById(id);
         if (id === sectionId + '-section') {
@@ -22,6 +26,11 @@ function showSection(sectionId) {
             link.classList.remove('active');
         }
     });
+}
+
+function toggleMobileMenu() {
+    const nav = document.getElementById('nav-links');
+    nav.classList.toggle('active');
 }
 
 // Inicializar Inventario

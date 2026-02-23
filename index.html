@@ -51,7 +51,12 @@
     <div id="main-view" class="hidden">
         <nav class="navbar">
             <div class="logo">Dul Shop</div>
-            <div class="nav-links">
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div id="nav-links" class="nav-links">
                 <a href="#" class="nav-link active" onclick="showSection('inventory')">Inventario</a>
                 <a href="#" class="nav-link" onclick="showSection('billing')">Facturación</a>
                 <a href="#" onclick="logout()">Cerrar Sesión</a>
