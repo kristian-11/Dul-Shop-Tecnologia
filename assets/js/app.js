@@ -36,6 +36,10 @@ function toggleMobileMenu() {
 // Inicializar Inventario
 function renderInventory() {
     const tableBody = document.getElementById('inventory-table-body');
+    
+    // Semilla de datos si está vacío (Objetos de Prueba)
+    initSeedData();
+
     const products = JSON.parse(localStorage.getItem('dul_shop_products')) || [];
 
     tableBody.innerHTML = '';
@@ -131,5 +135,27 @@ function deleteProduct(index) {
         products.splice(index, 1);
         localStorage.setItem('dul_shop_products', JSON.stringify(products));
         renderInventory();
+    }
+}
+
+// DATOS DE PRUEBA (SEED DATA)
+function initSeedData() {
+    if (!localStorage.getItem('dul_shop_products')) {
+        const seedProducts = [
+            { code: 'L001', name: 'MacBook Air M2', category: 'Laptop', stock: 5, price: 1200000 },
+            { code: 'S001', name: 'iPhone 15 Pro', category: 'Smartphone', stock: 8, price: 950000 },
+            { code: 'M001', name: 'Monitor LG 27"', category: 'Monitor', stock: 12, price: 350000 },
+            { code: 'A001', name: 'Sony WH-1000XM5', category: 'Accesorio', stock: 15, price: 280000 },
+            { code: 'C001', name: 'RTX 4070 Ti', category: 'Componente', stock: 3, price: 850000 }
+        ];
+        localStorage.setItem('dul_shop_products', JSON.stringify(seedProducts));
+    }
+}
+
+function resetAllData() {
+    if (confirm('¿Deseas resetear todos los datos a la configuración inicial?')) {
+        localStorage.removeItem('dul_shop_products');
+        localStorage.removeItem('dul_shop_bills');
+        location.reload();
     }
 }
